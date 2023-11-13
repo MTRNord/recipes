@@ -19,6 +19,6 @@ export default defineMarkdocConfig({
                 title: { type: String },
                 icon: { type: String },
             },
-        },
+        }
     },
 });

@@ -1,0 +1,113 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+import {
+    Recipe as CooklangRecipe,
+    type Text as CooklangText,
+    type Step,
+} from "@cooklang/cooklang-ts";
+import Default from "@astrojs/starlight/components/MarkdownContent.astro";
+
+const isRecipe = Astro.props.slug.includes("recipes");
+const recipe = new CooklangRecipe(Astro.props.entry.body, {
+    defaultIngredientAmount: "etwas",
+});
+const source_url_raw = recipe.metadata.source ?? "";
+const source_url = source_url_raw.replace("<", "").replace(">", "");
+---
+
+{
+    isRecipe ? (
+        <Default {...Astro.props}>
+            <article>
+                <h2 id="infos">Infos</h2>
+                <h3 id="source">Quelle</h3>
+                {recipe.metadata.source ? (
+                    <a href={source_url}>{source_url}</a>
+                ) : (
+                    <p>Keine Quelle angegeben</p>
+                )}
+
+                <h3 id="extra">Extra</h3>
+                {Array.from(Object.entries(recipe.metadata)).map(
+                    ([key, value]) =>
+                        key === "source" ? null : (
+                            <p>
+                                <b class="capitalize">{key}</b>:&nbsp;
+                                {value.replace("%", " ")}
+                            </p>
+                        ),
+                )}
+
+                <h2 id="zutaten">Zutaten</h2>
+                <ul>
+                    {recipe.ingredients.map((ingredient) => (
+                        <li>
+                            {["etwas"].includes(String(ingredient.quantity)) ? (
+                                <>
+                                    {ingredient.quantity}&nbsp;{ingredient.name}
+                                </>
+                            ) : (
+                                <>
+                                    {ingredient.name} — {ingredient.quantity}{" "}
+                                    {ingredient.units}
+                                </>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+                <h2 id="geraete">Hilfsmittel</h2>
+                <ul>
+                    {recipe.cookwares.map((cookware) => (
+                        <li>
+                            {cookware.quantity}&nbsp;{cookware.name}
+                        </li>
+                    ))}
+                </ul>
+
+                <h2 id="zubereitung">Zubereitung</h2>
+                <ol>
+                    {recipe.steps.map((step) => (
+                        <li class="leading-loose">
+                            {step.map((text: any) => {
+                                if (text.type === "text") {
+                                    return text.value;
+                                } else if (text.type === "ingredient") {
+                                    return (
+                                        <span class="rounded-full px-2 py-1 bg-green-200 text-black whitespace-nowrap">
+                                            {text.quantity === "etwas" ? (
+                                                <>{text.name}</>
+                                            ) : (
+                                                <>
+                                                    {text.quantity} {text.units}{" "}
+                                                    {text.name}
+                                                </>
+                                            )}
+                                        </span>
+                                    );
+                                } else if (text.type === "cookware") {
+                                    return (
+                                        <span class="rounded-full px-2 py-1 bg-cyan-200 text-black whitespace-nowrap">
+                                            {text.quantity}&nbsp;{text.name}
+                                        </span>
+                                    );
+                                } else if (text.type === "timer") {
+                                    return (
+                                        <span class="rounded-full px-2 py-1 bg-red-200 text-black whitespace-nowrap">
+                                            {text.quantity}&nbsp;{text.units}
+                                        </span>
+                                    );
+                                } else {
+                                    return "Error";
+                                }
+                            })}
+                        </li>
+                    ))}
+                </ol>
+            </article>
+        </Default>
+    ) : (
+        <Default {...Astro.props}>
+            <slot />
+        </Default>
+    )
+}
