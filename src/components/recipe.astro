@@ -1,16 +1,14 @@
 ---
 import type { Props } from "@astrojs/starlight/props";
-import {
-    Recipe as CooklangRecipe,
-    type Text as CooklangText,
-    type Step,
-} from "@cooklang/cooklang-ts";
+import { Recipe as CooklangRecipe } from "@cooklang/cooklang-ts";
 import Default from "@astrojs/starlight/components/MarkdownContent.astro";
 
 const isRecipe = Astro.props.slug.includes("recipes");
 const recipe = new CooklangRecipe(Astro.props.entry.body, {
     defaultIngredientAmount: "etwas",
 });
+const meta_array = Array.from(Object.entries(recipe.metadata));
+const contains_source = meta_array.find(([key, _value]) => "source" == key);
 const source_url_raw = recipe.metadata.source ?? "";
 const source_url = source_url_raw.replace("<", "").replace(">", "");
 ---
@@ -27,7 +25,15 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
                     <p>Keine Quelle angegeben</p>
                 )}
 
-                <h3 id="extra">Extra</h3>
+                {
+                    (contains_source && meta_array.length >= 2) || !contains_source && meta_array.length >= 1 ? 
+                    (
+                        <h3 id="extra">Extra</h3>
+                    ) :
+                    (
+                        <></>
+                        )
+                }
                 {Array.from(Object.entries(recipe.metadata)).map(
                     ([key, value]) =>
                         key === "source" ? null : (
