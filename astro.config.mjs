@@ -7,6 +7,7 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://recipes.nordgedanken.dev',
   integrations: [starlightLinksValidator(), starlight({
     title: 'Rezepte',
     locales: {
