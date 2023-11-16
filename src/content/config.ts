@@ -9,7 +9,8 @@ export const collections = {
 					title: z.optional(z.string()),
 					text: z.string()
 				}))),
-				description: z.optional(z.string())
+				description: z.optional(z.string()),
+				recipe: z.optional(z.boolean())
 			})
 		}
 	}),

@@ -4,7 +4,8 @@ import { Recipe as CooklangRecipe } from "@cooklang/cooklang-ts";
 import Default from "@astrojs/starlight/components/MarkdownContent.astro";
 import InfoBox from './infobox.astro';
 
-const isRecipe = Astro.props.slug.includes("recipes/");
+const frontmatter = Astro.props.entry.data;
+const isRecipe = frontmatter.recipe;
 const recipe = new CooklangRecipe(Astro.props.entry.body, {
     defaultIngredientAmount: "etwas",
 });
@@ -12,7 +13,6 @@ const meta_array = Array.from(Object.entries(recipe.metadata));
 const contains_source = meta_array.find(([key, _value]) => "source" === key.toLowerCase() || "quelle" === key.toLowerCase());
 const source_url_raw = (contains_source ?? [])[1] ?? "";
 const source_url = source_url_raw.replace("<", "").replace(">", "");
-const frontmatter = Astro.props.entry.data;
 const infos: {
     title?: string,
     text: string
