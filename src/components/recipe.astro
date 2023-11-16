@@ -3,13 +3,13 @@ import type { Props } from "@astrojs/starlight/props";
 import { Recipe as CooklangRecipe } from "@cooklang/cooklang-ts";
 import Default from "@astrojs/starlight/components/MarkdownContent.astro";
 
-const isRecipe = Astro.props.slug.includes("recipes");
+const isRecipe = Astro.props.slug.includes("recipes/");
 const recipe = new CooklangRecipe(Astro.props.entry.body, {
     defaultIngredientAmount: "etwas",
 });
 const meta_array = Array.from(Object.entries(recipe.metadata));
-const contains_source = meta_array.find(([key, _value]) => "source" == key);
-const source_url_raw = recipe.metadata.source ?? "";
+const contains_source = meta_array.find(([key, _value]) => "source" === key.toLowerCase() || "quelle" === key.toLowerCase());
+const source_url_raw = (contains_source ?? [])[1] ?? "";
 const source_url = source_url_raw.replace("<", "").replace(">", "");
 ---
 
@@ -18,8 +18,8 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
         <Default {...Astro.props}>
             <article>
                 <p class="no-margin-children">
-                {recipe.metadata.source ? (
-                    <a href={source_url}>{source_url}</a><br/>
+                {(contains_source?.length ?? 0) > 0 ? (
+                    <><b>Quelle: </b>{source_url.includes("http") ?  <a href={source_url}>{source_url}</a> : <span>{source_url}</span>}<br/></>
                 ) : (
                     <><b>Quelle: </b>Keine Quelle angegeben</><br/>
                 )}
@@ -29,7 +29,7 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
                     (
                             Array.from(Object.entries(recipe.metadata)).map(
                                 ([key, value]) =>
-                                    key === "source" ? null : (
+                                    key.toLowerCase() === "source" || key.toLowerCase() === "quelle" ? null : (
                                         <>
                                             <b class="capitalize">{key}</b>:
                                             {value.replace("%", " ")}<br/>
@@ -64,6 +64,7 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
                         </ul>
                     </div>
 
+                    {recipe.cookwares.length > 0 ? (
                     <div class="box p-4 border border-zinc-300 rounded min-w-[10rem] w-full md:w-auto relative">
                         <h2 id="geraete">Hilfsmittel</h2>
                         <ul>
@@ -73,7 +74,8 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
                                 </li>
                             ))}
                         </ul>
-                        </div>
+                    </div>) : null}
+
                 </div>
 
                 <h2 id="zubereitung">Zubereitung</h2>

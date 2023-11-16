@@ -9,6 +9,12 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   integrations: [starlightLinksValidator(), starlight({
     title: 'Rezepte',
+    locales: {
+      root: {
+        label: 'Deutsch',
+        lang: 'de-DE'
+      }
+    },
     customCss: [
       './src/tailwind.css',
     ],
