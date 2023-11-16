@@ -23,7 +23,7 @@ const description = frontmatter.description;
     isRecipe ? (
         <Default {...Astro.props}>
             <article>
-                {description && <><p>{description}</p><hr/></>}
+                {description && <><p class="whitespace-pre-line">{description}</p><hr/></>}
                 <p class="no-margin-children">
                 {(contains_source?.length ?? 0) > 0 ? (
                     <><b>Quelle: </b>{source_url.includes("http") ?  <a href={source_url}>{source_url}</a> : <span>{source_url}</span>}<br/></>
