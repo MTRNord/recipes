@@ -17,58 +17,64 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
     isRecipe ? (
         <Default {...Astro.props}>
             <article>
-                <h2 id="infos">Infos</h2>
-                <h3 id="source">Quelle</h3>
+                <p class="no-margin-children">
                 {recipe.metadata.source ? (
-                    <a href={source_url}>{source_url}</a>
+                    <a href={source_url}>{source_url}</a><br/>
                 ) : (
-                    <p>Keine Quelle angegeben</p>
+                    <><b>Quelle: </b>Keine Quelle angegeben</><br/>
                 )}
 
                 {
                     (contains_source && meta_array.length >= 2) || !contains_source && meta_array.length >= 1 ? 
                     (
-                        <h3 id="extra">Extra</h3>
+                            Array.from(Object.entries(recipe.metadata)).map(
+                                ([key, value]) =>
+                                    key === "source" ? null : (
+                                        <>
+                                            <b class="capitalize">{key}</b>:
+                                            {value.replace("%", " ")}<br/>
+                                        </>
+                                    ),
+                            )
                     ) :
                     (
                         <></>
                         )
                 }
-                {Array.from(Object.entries(recipe.metadata)).map(
-                    ([key, value]) =>
-                        key === "source" ? null : (
-                            <p>
-                                <b class="capitalize">{key}</b>:&nbsp;
-                                {value.replace("%", " ")}
-                            </p>
-                        ),
-                )}
+                </p>
+               
+                <div class="grid-container">
+                    <div class="box p-4 border border-zinc-300 rounded min-w-[10rem] w-full md:w-auto relative">
+                        <h2 id="zutaten">Zutaten</h2>
+                        <ul>
+                            {recipe.ingredients.map((ingredient) => (
+                                <li>
+                                    {["etwas"].includes(String(ingredient.quantity)) ? (
+                                        <>
+                                            {ingredient.quantity}&nbsp;{ingredient.name}
+                                        </>
+                                    ) : (
+                                        <>
+                                            {ingredient.name} — {ingredient.quantity}{" "}
+                                            {ingredient.units}
+                                        </>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                <h2 id="zutaten">Zutaten</h2>
-                <ul>
-                    {recipe.ingredients.map((ingredient) => (
-                        <li>
-                            {["etwas"].includes(String(ingredient.quantity)) ? (
-                                <>
-                                    {ingredient.quantity}&nbsp;{ingredient.name}
-                                </>
-                            ) : (
-                                <>
-                                    {ingredient.name} — {ingredient.quantity}{" "}
-                                    {ingredient.units}
-                                </>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-                <h2 id="geraete">Hilfsmittel</h2>
-                <ul>
-                    {recipe.cookwares.map((cookware) => (
-                        <li>
-                            {cookware.quantity}&nbsp;{cookware.name}
-                        </li>
-                    ))}
-                </ul>
+                    <div class="box p-4 border border-zinc-300 rounded min-w-[10rem] w-full md:w-auto relative">
+                        <h2 id="geraete">Hilfsmittel</h2>
+                        <ul>
+                            {recipe.cookwares.map((cookware) => (
+                                <li>
+                                    {cookware.quantity}&nbsp;{cookware.name}
+                                </li>
+                            ))}
+                        </ul>
+                        </div>
+                </div>
 
                 <h2 id="zubereitung">Zubereitung</h2>
                 <ol>
@@ -111,6 +117,26 @@ const source_url = source_url_raw.replace("<", "").replace(">", "");
                 </ol>
             </article>
         </Default>
+        <style>
+            .grid-container {
+                display: grid;
+                grid-auto-flow: dense;
+                gap: 1rem;
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+                container-type: inline-size;
+            }
+
+            .box {
+                display: grid;
+                grid-row: span 2;
+                grid-template-rows: subgrid;
+                margin: 0 !important;
+            }
+
+            .no-margin-children > * {
+                margin: 0 !important;
+            }
+        </style>
     ) : (
         <Default {...Astro.props}>
             <slot />
