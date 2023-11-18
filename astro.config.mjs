@@ -7,6 +7,7 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
+  prefetch: true,
   site: 'https://recipes.nordgedanken.dev',
   integrations: [starlightLinksValidator(), tailwind({
     // Disable the default base styles:
@@ -17,7 +18,7 @@ export default defineConfig({
     locales: {
       'de-de': {
         label: 'Deutsch',
-        lang: 'de-de'
+        lang: 'de-DE'
       },
       en: {
         label: 'English'
