@@ -8,12 +8,19 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://recipes.nordgedanken.dev',
-  integrations: [starlightLinksValidator(), starlight({
+  integrations: [starlightLinksValidator(), tailwind({
+    // Disable the default base styles:
+    applyBaseStyles: false,
+  }), starlight({
     title: 'Rezepte',
+    defaultLocale: 'de-de',
     locales: {
-      root: {
+      'de-de': {
         label: 'Deutsch',
-        lang: 'de-DE'
+        lang: 'de-de'
+      },
+      en: {
+        label: 'English'
       }
     },
     customCss: [
@@ -21,11 +28,17 @@ export default defineConfig({
     ],
     sidebar: [{
       label: 'Rezepte',
+      translations: {
+        'en': 'Recipes',
+      },
       autogenerate: {
         directory: 'recipes'
       }
     }, {
       label: 'Anleitungen',
+      translations: {
+        'en': 'Guides',
+      },
       autogenerate: {
         directory: 'guides'
       }
@@ -33,10 +46,5 @@ export default defineConfig({
     components: {
       MarkdownContent: './src/components/recipe.astro'
     }
-  }), markdoc({
-    allowHTML: true
-  }), tailwind({
-    // Disable the default base styles:
-    applyBaseStyles: false,
-  })]
+  }), markdoc()]
 });

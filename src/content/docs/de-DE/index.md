@@ -5,13 +5,13 @@ template: splash
 hero:
   tagline: Beginne ein Rezept zu finden
   image:
-    file: ../../assets/houston.webp
+    file: ../../../assets/houston.webp
   actions:
     - text: Rezepte
-      link: /recipes/
+      link: /de-de/recipes/
       icon: right-arrow
       variant: primary
     - text: Lese die Anleitung
-      link: /guides/rezepte/
+      link: /de-de/guides/rezepte/
       icon: external
 ---
