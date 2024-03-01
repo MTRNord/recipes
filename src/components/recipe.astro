@@ -161,6 +161,13 @@ const description = frontmatter.description;
                 container-type: inline-size;
             }
 
+            @media only screen and (max-width: 600px) {
+                .grid-container {
+                    grid-template-rows: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+                    grid-template-columns: 1fr;
+                }
+            }
+
             .box {
                 display: grid;
                 grid-row: span 2;
