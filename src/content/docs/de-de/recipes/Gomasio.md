@@ -19,7 +19,7 @@ info:
 
 >> Quelle: Magisch fix - Jutta Grimm
 >> Produziert: 75-100%g
->> Aufbewahrung: trocken und dunkel, dicht verschlossen, haltbar mindestens 1 Jahr
+>> Aufbewahrung: Trocken und dunkel, dicht verschlossen, haltbar mindestens 1 Jahr
 
 Den @Sesam{10-15%EL} in einer #Schüssel mit @lauwarmen Wasser{} waschen, in ein #Sieb geben und gut abtropfen lassen.
 Das @Meersalz{1%EL} in einer trockenen, #schweren Pfanne{} unter Rühren rösten, aber nicht bräunen.
