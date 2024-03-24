@@ -22,7 +22,7 @@ const description = frontmatter.description;
 {
     isRecipe ? (
         <Default {...Astro.props}>
-            <article>
+            <article vocab="https://schema.org/" typeof="Recipe">
                 {description && <><p class="whitespace-pre-line">{description}</p><hr/></>}
                 <p class="no-margin-children">
                 {(contains_source?.length ?? 0) > 0 ? (
@@ -57,14 +57,14 @@ const description = frontmatter.description;
                             {recipe.ingredients.map((ingredient) => (
                                 <li>
                                     {["etwas"].includes(String(ingredient.quantity)) ? (
-                                        <>
+                                        <span property="recipeIngredient">
                                             {ingredient.quantity}&nbsp;{ingredient.name}
-                                        </>
+                                        </span>
                                     ) : (
-                                        <>
+                                        <span property="recipeIngredient">
                                             {ingredient.name} — {ingredient.quantity}{" "}
                                             {ingredient.units}
-                                        </>
+                                        </span>
                                     )}
                                 </li>
                             ))}
@@ -104,7 +104,7 @@ const description = frontmatter.description;
                 }
 
                 <h2 id="zubereitung">Zubereitung</h2>
-                <ol>
+                <ol property="recipeInstructions">
                     {recipe.steps.map((step) => (
                         <li class="leading-loose">
                             {step.map((text: any) => {
@@ -140,6 +140,12 @@ const description = frontmatter.description;
                                 } else if (text.type === "timer") {
                                     return (
                                         <span class="rounded-full px-2 py-1 bg-red-200 text-black whitespace-nowrap">
+                                            {
+                                                text.units == "minutes" ? (
+                                                    <meta property="performTime" content={"PT"+text.quanity+"M"} />
+                                                ): <></>
+                                            }
+                                            
                                             {text.quantity}&nbsp;{text.units}
                                         </span>
                                     );
